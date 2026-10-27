@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BankSphere | Banking Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-icon">B</span><div><h1>BankSphere</h1><p>Banking Management System</p></div></div>
+    <span class="status"><i></i> Local server</span>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <p class="nav-label">MAIN MENU</p>
+      <button class="nav-item active" data-page="dashboard">▦ &nbsp; Dashboard</button>
+      <button class="nav-item" data-page="accounts">♙ &nbsp; Accounts</button>
+      <button class="nav-item" data-page="add">＋ &nbsp; Add Account</button>
+      <button class="nav-item" data-page="transactions">⇄ &nbsp; Transactions</button>
+      <!-- <div class="sidebar-note"><str</strong><p>Data is kept in RAM and clears when the C++ server stops.</p></div> -->
+    </aside>
+
+    <main class="content">
+      <div id="notice" class="notice" hidden></div>
+
+      <section class="page" id="page-dashboard">
+        <div class="page-heading"><div><p class="eyebrow">OVERVIEW</p><h2>Dashboard</h2><p class="muted">Welcome to your banking workspace.</p></div><button class="button primary" data-go="add">＋ New account</button></div>
+        <div class="stats">
+          <article class="stat-card"><span class="stat-symbol blue">♙</span><p>Total accounts</p><h3 id="stat-accounts">0</h3><small>Registered customers</small></article>
+          <article class="stat-card"><span class="stat-symbol green">₹</span><p>Total deposits</p><h3 id="stat-balance">₹0.00</h3><small>Combined account balance</small></article>
+          <article class="stat-card"><span class="stat-symbol purple">⇄</span><p>Transactions</p><h3 id="stat-transactions">0</h3><small>Recorded this session</small></article>
+        </div>
+        <div class="panel">
+          <div class="panel-heading"><div><h3>Recent accounts</h3><p class="muted">Recently created accounts</p></div><button class="button light" data-go="accounts">View all</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Account no.</th><th>Customer</th><th>Phone</th><th>Balance</th></tr></thead><tbody id="recent-accounts"></tbody></table></div>
+        </div>
+        <div class="quick-actions">
+          <button class="quick-card" data-go="deposit"><span>＋</span><strong>Deposit money</strong><small>Add funds to an account</small></button>
+          <button class="quick-card" data-go="withdraw"><span>−</span><strong>Withdraw money</strong><small>Withdraw available funds</small></button>
+          <button class="quick-card" data-go="transfer"><span>⇄</span><strong>Transfer money</strong><small>Move funds between accounts</small></button>
+        </div>
+      </section>
+
+      <section class="page" id="page-accounts" hidden>
+        <div class="page-heading"><div><p class="eyebrow">CUSTOMERS</p><h2>Accounts</h2><p class="muted">Search and review all bank accounts.</p></div><button class="button primary" data-go="add">＋ Add account</button></div>
+        <div class="panel"><div class="toolbar"><input id="account-search" placeholder="Search by name, phone or account number"><button class="button light" id="refresh-accounts">Refresh</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Account no.</th><th>Customer</th><th>Phone</th><th>Available balance</th></tr></thead><tbody id="accounts-table"></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-add" hidden>
+        <div class="page-heading"><div><p class="eyebrow">CUSTOMERS</p><h2>Create an account</h2><p class="muted">Register a customer in BankSphere.</p></div></div>
+        <div class="panel form-panel"><h3>Customer details</h3><form id="add-form">
+          <label>Full name<input name="name" required maxlength="80" placeholder="e.g. Amaan Kumar"></label>
+          <label>Phone number<input name="phone" required maxlength="20" placeholder="Enter phone number"></label>
+          <label>Opening balance (₹)<input name="initial" type="number" min="0" step="0.01" value="0" required></label>
+          <p class="form-hint">The account number is generated automatically by the C++ backend.</p>
+          <button class="button primary" type="submit">Create account</button>
+        </form></div>
+      </section>
+
+      <section class="page" id="page-deposit" hidden>
+        <div class="page-heading"><div><p class="eyebrow">BANKING OPERATIONS</p><h2>Deposit money</h2><p class="muted">Add money to a customer's account.</p></div></div>
+        <div class="panel form-panel"><h3>Deposit details</h3><form id="deposit-form">
+          <label>Account<select name="accountId" class="account-select" required></select></label>
+          <label>Amount (₹)<input name="amount" type="number" min="0.01" step="0.01" required placeholder="0.00"></label>
+          <button class="button primary" type="submit">Confirm deposit</button>
+        </form></div>
+      </section>
+
+      <section class="page" id="page-withdraw" hidden>
+        <div class="page-heading"><div><p class="eyebrow">BANKING OPERATIONS</p><h2>Withdraw money</h2><p class="muted">Withdraw funds from an account.</p></div></div>
+        <div class="panel form-panel"><h3>Withdrawal details</h3><form id="withdraw-form">
+          <label>Account<select name="accountId" class="account-select" required></select></label>
+          <label>Amount (₹)<input name="amount" type="number" min="0.01" step="0.01" required placeholder="0.00"></label>
+          <button class="button primary" type="submit">Confirm withdrawal</button>
+        </form></div>
+      </section>
+
+      <section class="page" id="page-transfer" hidden>
+        <div class="page-heading"><div><p class="eyebrow">BANKING OPERATIONS</p><h2>Transfer money</h2><p class="muted">Transfer money between two accounts.</p></div></div>
+        <div class="panel form-panel"><h3>Transfer details</h3><form id="transfer-form">
+          <label>From account<select name="fromId" class="account-select" required></select></label>
+          <label>To account<select name="toId" class="account-select" required></select></label>
+          <label>Amount (₹)<input name="amount" type="number" min="0.01" step="0.01" required placeholder="0.00"></label>
+          <button class="button primary" type="submit">Transfer funds</button>
+        </form></div>
+      </section>
+
+      <section class="page" id="page-transactions" hidden>
+        <div class="page-heading"><div><p class="eyebrow">ACTIVITY</p><h2>Transaction history</h2><p class="muted">Deposits, withdrawals and transfers in this session.</p></div><button class="button light" id="refresh-transactions">Refresh</button></div>
+        <div class="panel"><div class="table-wrap"><table><thead><tr><th>Transaction</th><th>Type</th><th>From</th><th>To</th><th>Amount</th><th>Date and time</th></tr></thead><tbody id="transactions-table"></tbody></table></div></div>
+      </section>
+      <footer>BankSphere · C++ Winsock backend . Developed by Wali</footer>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
